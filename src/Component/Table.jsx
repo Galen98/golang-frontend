@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
-
+import { Link } from "react-router-dom"
 const Table = (data) => { 
 const datas = Object.values(data.data)
 const [filter, setFiltersearch] = useState('')
@@ -18,19 +18,17 @@ const UpdateTrash = (id) => {
       setTitle(response.data.data.title);
       setCategory(response.data.data.category);
       setContent(response.data.data.content);
-    })
-    .then(() => {
-      axios.put(`http://localhost:8080/article/${id}`, {
-        'title': title,
-        'content': content,
-        'category': category,
-        'status': 'Trash'
+      axios.patch(`http://localhost:8080/article/${id}`, {
+        title: response.data.data.title,
+        content: response.data.data.content,
+        category: response.data.data.category,
+        status: 'Trash'
       });
     })
     .catch(error => {
       console.error('Error updating data:', error);
     });
-    console.log(content)
+    window.location.reload();
 };
 
 console.log(title)
@@ -84,7 +82,7 @@ console.log(title)
         Action
     </a>
   <div className="dropdown-menu">
-    <a className="dropdown-item" href="#">Edit</a>
+    <Link to={`/edit/${data.id}`} className="dropdown-item">Edit</Link>
     <a onClick={() => UpdateTrash(data.id)}
     className="dropdown-item">Trash</a>
   </div>
